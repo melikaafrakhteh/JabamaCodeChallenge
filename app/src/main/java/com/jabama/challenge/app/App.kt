@@ -3,6 +3,7 @@ package com.jabama.challenge.app
 import android.app.Application
 import androidx.preference.PreferenceManager
 import com.jabama.challenge.repository.token.TokenRepositoryImpl
+import com.jabama.common.di.dispatchersModule
 import com.jabama.network.di.accessTokenModule
 import com.jabama.network.di.networkModule
 import org.koin.android.ext.koin.androidContext
@@ -20,7 +21,8 @@ class App : Application() {
                 listOf(
                     appModule,
                     networkModule,
-                    accessTokenModule
+                    accessTokenModule,
+                    dispatchersModule,
                 )
             )
         }
