@@ -6,6 +6,10 @@ plugins {
 android {
     namespace = "com.jabama.core.network"
     compileSdk = 34
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
