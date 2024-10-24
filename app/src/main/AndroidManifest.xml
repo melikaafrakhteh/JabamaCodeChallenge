@@ -25,19 +25,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.jabama.challenge.github.LoginUriActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="challenge" />
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>
