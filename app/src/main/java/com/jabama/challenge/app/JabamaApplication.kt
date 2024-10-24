@@ -1,26 +1,25 @@
 package com.jabama.challenge.app
 
 import android.app.Application
-import androidx.preference.PreferenceManager
-import com.jabama.data.repository.token.TokenRepositoryImpl
 import com.jabama.common.di.dispatchersModule
 import com.jabama.data.di.dataModule
 import com.jabama.network.di.accessTokenModule
 import com.jabama.network.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
-const val APPLICATION_CONTEXT = "APPLICATION_CONTEXT"
+
+
 class JabamaApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         startKoin {
+
             androidContext(this@JabamaApplication)
+
             modules(
                 listOf(
-                    appModule,
                     networkModule,
                     accessTokenModule,
                     dispatchersModule,
@@ -29,11 +28,4 @@ class JabamaApplication : Application() {
             )
         }
     }
-
-    val appModule = module {
-        factory { TokenRepositoryImpl(get()) }
-        single(named(APPLICATION_CONTEXT)) { applicationContext }
-        single { PreferenceManager.getDefaultSharedPreferences(get()) }
-    }
-
 }
