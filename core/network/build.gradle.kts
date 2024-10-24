@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.coroutines.adapter)
+    implementation(libs.koin)
 }

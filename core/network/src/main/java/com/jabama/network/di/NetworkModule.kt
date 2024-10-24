@@ -1,8 +1,6 @@
-package com.jabama.challenge.network.di
+package com.jabama.network.di
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.jabama.challenge.repository.token.TokenRepository
-import com.jabama.challenge.repository.token.TokenRepositoryImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,6 +15,7 @@ const val RETROFIT = "RETROFIT"
 const val READ_TIMEOUT = "READ_TIMEOUT"
 const val WRITE_TIMEOUT = "WRITE_TIMEOUT"
 const val CONNECTION_TIMEOUT = "CONNECTION_TIMEOUT"
+
 val networkModule = module {
 
     single(named(READ_TIMEOUT)) { 30 * 1000 }
@@ -45,9 +44,5 @@ val networkModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-    }
-
-    single {
-        TokenRepositoryImpl(get()) as TokenRepository
     }
 }
