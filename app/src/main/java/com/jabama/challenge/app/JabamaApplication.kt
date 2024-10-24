@@ -12,12 +12,12 @@ import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 const val APPLICATION_CONTEXT = "APPLICATION_CONTEXT"
-class App : Application() {
+class JabamaApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@App)
+            androidContext(this@JabamaApplication)
             modules(
                 listOf(
                     appModule,
