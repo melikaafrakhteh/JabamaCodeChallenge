@@ -10,8 +10,8 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core:network"))
+    implementation(project(":core:model"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.core)
