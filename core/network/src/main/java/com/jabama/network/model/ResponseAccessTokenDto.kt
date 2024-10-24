@@ -1,8 +1,8 @@
-package com.jabama.challenge.network.oauth
+package com.jabama.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseAccessToken(
+data class ResponseAccessTokenDto(
     @SerializedName("access_token")
     var accessToken: String,
 

@@ -8,4 +8,10 @@ android {
     compileSdk = 34
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.loggging)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.coroutines.adapter)
+}
