@@ -2,7 +2,7 @@ package com.jabama.challenge.app
 
 import android.app.Application
 import androidx.preference.PreferenceManager
-import com.jabama.challenge.repository.token.TokenRepositoryImpl
+import com.jabama.data.repository.token.TokenRepositoryImpl
 import com.jabama.common.di.dispatchersModule
 import com.jabama.data.di.dataModule
 import com.jabama.network.di.accessTokenModule
