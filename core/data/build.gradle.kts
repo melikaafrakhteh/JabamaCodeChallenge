@@ -20,4 +20,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.coroutines.core)
     implementation(libs.koin)
+    implementation(libs.preference.ktx)
 }
