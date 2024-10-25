@@ -7,11 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jabama.challenge.authentication.navigation.JabamaAppNavigation
 import com.jabama.designsystem.theme.JabamaTheme
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val authViewModel: AuthenticationViewModel by inject()
+    private val authViewModel: AuthenticationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

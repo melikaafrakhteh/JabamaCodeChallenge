@@ -7,14 +7,14 @@ import org.koin.dsl.module
 
 val authenticationModule = module {
 
-    viewModel {
-        AuthenticationViewModel(get())
-    }
-
     factory {
         ReadTokenUseCase(
             get()
         )
+    }
+
+    viewModel {
+        AuthenticationViewModel(get())
     }
 
 }

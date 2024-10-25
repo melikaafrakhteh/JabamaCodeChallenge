@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jabama.challenge.github"
+    namespace = "com.jabama.challenge.authentication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId "com.jabama.challenge.github"
+        applicationId "com.jabama.challenge.authentication"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1
@@ -23,6 +23,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "GITHUB_CLIENT_ID", "\"Ov23liCMnKeaPbiFuMDd\""
+            buildConfigField "String", "GITHUB_CLIENT_SECRET", "\"914d31af0a192870110e48e5b90801cdc87d7e38\""
+            buildConfigField "String", "GITHUB_CALLBACK_URL", "\"jabama://callback\""
+        }
     }
 
     compileOptions {
@@ -34,18 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-
-        debug {
-            buildConfigField "String", "GITHUB_CLIENT_ID", "\"Ov23liCMnKeaPbiFuMDd\""
-            buildConfigField "String", "GITHUB_CLIENT_SECRET", "\"914d31af0a192870110e48e5b90801cdc87d7e38\""
-            buildConfigField "String", "GITHUB_CALLBACK_URL", "\"jabama://callback\""
-        }
+        buildConfig = true
     }
 }
 
@@ -76,8 +73,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.preference.ktx)
     implementation(libs.androidx.appcompat)
-    implementation (libs.androidx.navigation.compose)
-    implementation (libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.runtime.ktx)
 
     testImplementation(libs.junit)
 
