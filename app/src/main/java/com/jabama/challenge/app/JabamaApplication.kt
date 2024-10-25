@@ -4,6 +4,7 @@ import android.app.Application
 import com.jabama.challenge.authentication.di.authenticationModule
 import com.jabama.common.di.dispatchersModule
 import com.jabama.data.di.dataModule
+import com.jabama.login.di.loginModule
 import com.jabama.network.di.accessTokenModule
 import com.jabama.network.di.networkModule
 import org.koin.android.ext.koin.androidContext
@@ -26,6 +27,7 @@ class JabamaApplication : Application() {
                     dispatchersModule,
                     dataModule,
                     authenticationModule,
+                    loginModule,
                 )
             )
         }

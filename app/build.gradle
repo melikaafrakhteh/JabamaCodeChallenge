@@ -23,14 +23,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "GITHUB_CLIENT_ID", "\"Ov23liCMnKeaPbiFuMDd\""
-            buildConfigField "String", "GITHUB_CLIENT_SECRET", "\"914d31af0a192870110e48e5b90801cdc87d7e38\""
-            buildConfigField "String", "GITHUB_CALLBACK_URL", "\"jabama://callback\""
-        }
     }
 
     compileOptions {
@@ -42,7 +34,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 }
 
@@ -52,6 +43,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
+    implementation(project(":feature:login"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
