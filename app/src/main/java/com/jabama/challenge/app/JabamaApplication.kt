@@ -1,6 +1,7 @@
 package com.jabama.challenge.app
 
 import android.app.Application
+import com.jabama.challenge.authentication.di.authenticationModule
 import com.jabama.common.di.dispatchersModule
 import com.jabama.data.di.dataModule
 import com.jabama.network.di.accessTokenModule
@@ -24,6 +25,7 @@ class JabamaApplication : Application() {
                     accessTokenModule,
                     dispatchersModule,
                     dataModule,
+                    authenticationModule,
                 )
             )
         }
