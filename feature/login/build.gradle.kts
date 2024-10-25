@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jabama.feature.authentication"
+    namespace = "com.jabama.feature.login"
     compileSdk = 34
 }
 
