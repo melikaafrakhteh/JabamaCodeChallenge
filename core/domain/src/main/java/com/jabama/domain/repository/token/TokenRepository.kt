@@ -1,4 +1,4 @@
-package com.jabama.data.repository.token
+package com.jabama.domain.repository.token
 
 interface TokenRepository {
 

@@ -1,7 +1,7 @@
 package com.jabama.challenge.authentication
 
 import androidx.lifecycle.ViewModel
-import com.jabama.domain.token.ReadTokenUseCase
+import com.jabama.domain.usecase.token.ReadTokenUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -1,4 +1,4 @@
-package com.jabama.data.repository.repositories
+package com.jabama.domain.repository.repositories
 
 import com.jabama.common.Resource
 import com.jabama.model.RepositoryResponse

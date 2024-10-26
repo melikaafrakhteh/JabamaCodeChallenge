@@ -1,7 +1,7 @@
-package com.jabama.domain.aouth
+package com.jabama.domain.usecase.aouth
 
 import com.jabama.common.Resource
-import com.jabama.data.repository.oauth.AccessTokenRepository
+import com.jabama.domain.repository.oauth.AccessTokenRepository
 import com.jabama.model.RequestAccessToken
 import com.jabama.model.ResponseAccessToken
 

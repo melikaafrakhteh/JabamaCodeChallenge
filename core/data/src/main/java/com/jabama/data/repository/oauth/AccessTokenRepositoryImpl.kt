@@ -3,6 +3,7 @@ package com.jabama.data.repository.oauth
 import com.jabama.common.Resource
 import com.jabama.data.mapper.toDataModel
 import com.jabama.data.mapper.toDomainModel
+import com.jabama.domain.repository.oauth.AccessTokenRepository
 import com.jabama.model.RequestAccessToken
 import com.jabama.model.ResponseAccessToken
 import com.jabama.network.datasource.token.AccessTokenDataSource

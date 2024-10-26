@@ -1,7 +1,7 @@
-package com.jabama.domain.repositories
+package com.jabama.domain.usecase.repositories
 
 import com.jabama.common.Resource
-import com.jabama.data.repository.repositories.RepositoriesSearchRepository
+import com.jabama.domain.repository.repositories.RepositoriesSearchRepository
 import com.jabama.model.RepositoryResponse
 import kotlinx.coroutines.flow.Flow
 

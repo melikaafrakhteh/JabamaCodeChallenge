@@ -2,6 +2,7 @@ package com.jabama.data.repository.token
 
 import android.content.SharedPreferences
 import android.os.Build
+import com.jabama.domain.repository.token.TokenRepository
 
 
 private const val TOKEN = "TOKEN"

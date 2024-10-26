@@ -5,8 +5,8 @@ package com.jabama.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jabama.common.Resource
-import com.jabama.domain.repositories.GetRepositoriesUseCase
-import com.jabama.domain.token.ClearTokenUseCase
+import com.jabama.domain.usecase.repositories.GetRepositoriesUseCase
+import com.jabama.domain.usecase.token.ClearTokenUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel

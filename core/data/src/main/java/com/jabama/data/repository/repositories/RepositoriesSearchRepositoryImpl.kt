@@ -2,6 +2,7 @@ package com.jabama.data.repository.repositories
 
 import com.jabama.common.Resource
 import com.jabama.data.mapper.toDomainModel
+import com.jabama.domain.repository.repositories.RepositoriesSearchRepository
 import com.jabama.model.RepositoryResponse
 import com.jabama.network.datasource.repository.RepositoryDataSource
 import kotlinx.coroutines.CoroutineDispatcher

@@ -1,4 +1,4 @@
-package com.jabama.data.repository.oauth
+package com.jabama.domain.repository.oauth
 
 import com.jabama.common.Resource
 import com.jabama.model.RequestAccessToken

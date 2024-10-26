@@ -4,11 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jabama.common.Resource
-import com.jabama.domain.aouth.GetAccessTokenUseCase
-import com.jabama.domain.token.SaveTokenUseCase
+import com.jabama.domain.usecase.aouth.GetAccessTokenUseCase
+import com.jabama.domain.usecase.token.SaveTokenUseCase
 import com.jabama.feature.login.BuildConfig
 import com.jabama.model.RequestAccessToken
-import com.jabama.model.ResponseAccessToken
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

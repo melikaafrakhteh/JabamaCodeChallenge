@@ -1,7 +1,7 @@
 package com.jabama.search.di
 
-import com.jabama.domain.repositories.GetRepositoriesUseCase
-import com.jabama.domain.token.ClearTokenUseCase
+import com.jabama.domain.usecase.repositories.GetRepositoriesUseCase
+import com.jabama.domain.usecase.token.ClearTokenUseCase
 import com.jabama.search.SearchViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
