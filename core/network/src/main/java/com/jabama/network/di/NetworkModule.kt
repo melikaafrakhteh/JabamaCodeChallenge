@@ -1,5 +1,6 @@
 package com.jabama.network.di
 
+import com.jabama.network.interceptor.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -34,6 +35,7 @@ val networkModule = module {
             .writeTimeout(get(named(WRITE_TIMEOUT)), TimeUnit.MILLISECONDS)
             .connectTimeout(get(named(CONNECTION_TIMEOUT)), TimeUnit.MILLISECONDS)
             .addInterceptor(get<Interceptor>())
+            .addInterceptor(AuthInterceptor())
             .build()
     }
 
