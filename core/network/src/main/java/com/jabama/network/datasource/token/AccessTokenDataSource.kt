@@ -1,4 +1,4 @@
-package com.jabama.network.datasource
+package com.jabama.network.datasource.token
 
 import com.jabama.common.Resource
 import com.jabama.network.model.RequestAccessTokenDto

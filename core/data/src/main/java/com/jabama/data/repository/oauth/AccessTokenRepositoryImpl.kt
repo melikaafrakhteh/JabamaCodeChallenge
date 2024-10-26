@@ -5,7 +5,7 @@ import com.jabama.data.mapper.toDataModel
 import com.jabama.data.mapper.toDomainModel
 import com.jabama.model.RequestAccessToken
 import com.jabama.model.ResponseAccessToken
-import com.jabama.network.datasource.AccessTokenDataSource
+import com.jabama.network.datasource.token.AccessTokenDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 

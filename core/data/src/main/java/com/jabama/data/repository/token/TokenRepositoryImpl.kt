@@ -22,4 +22,14 @@ class TokenRepositoryImpl(
 
     override fun readToken(): String =
         sharedPreferences.getString(TOKEN, "") ?: ""
+
+    override fun clearToken() {
+        val editor = sharedPreferences.edit().clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            editor.apply()
+        } else {
+            editor.commit()
+        }
+    }
+
 }

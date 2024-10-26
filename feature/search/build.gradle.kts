@@ -8,8 +8,8 @@ android {
     namespace = "com.jabama.feature.search"
     compileSdk = 34
 
-    buildFeatures {
-        buildConfig = true
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -30,6 +30,9 @@ dependencies {
     debugApi(libs.androidx.ui.tooling)
     api(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.koin)
     api(libs.koin.compose)
+    implementation(libs.immutable.list)
 }

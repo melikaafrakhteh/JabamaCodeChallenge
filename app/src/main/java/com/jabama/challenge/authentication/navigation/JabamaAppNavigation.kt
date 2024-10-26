@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jabama.common.RouteConstant.LOGIN_ROUTE
 import com.jabama.common.RouteConstant.SEARCH_ROUTE
 import com.jabama.login.LoginRoute
+import com.jabama.search.SearchRoute
 
 
 @Composable
@@ -23,7 +24,9 @@ internal fun JabamaAppNavigation(isAuthenticated: Boolean) {
             }
         }
         composable(route = SEARCH_ROUTE) {
-            //TODO: Search screen
+            SearchRoute {
+                navController.navigate(LOGIN_ROUTE)
+            }
         }
     }
 }
