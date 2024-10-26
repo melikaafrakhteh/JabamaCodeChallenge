@@ -2,11 +2,13 @@
 
 package com.jabama.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jabama.common.Resource
 import com.jabama.domain.usecase.repositories.GetRepositoriesUseCase
 import com.jabama.domain.usecase.token.ClearTokenUseCase
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -33,8 +35,12 @@ class SearchViewModel(
     private val _effect = Channel<SearchEffect>()
     val effect = _effect.receiveAsFlow()
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Log.e("search", "Caught$throwable")
+    }
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             state
                 .map { it.searchQuery }
                 .debounce(300)
@@ -105,7 +111,7 @@ class SearchViewModel(
     }
 
     private fun retrySearch() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             getRepositoriesUseCase(_state.value.searchQuery.orEmpty())
                 .collect { results ->
                     when (results) {
