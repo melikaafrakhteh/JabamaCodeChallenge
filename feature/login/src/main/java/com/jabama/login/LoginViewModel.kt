@@ -1,9 +1,9 @@
 package com.jabama.login
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jabama.common.AuthCoordinator
 import com.jabama.common.Resource
 import com.jabama.domain.usecase.aouth.GetAccessTokenUseCase
 import com.jabama.domain.usecase.token.SaveTokenUseCase
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val accessTokenUseCase: GetAccessTokenUseCase,
-    private val saveTokenUseCase: SaveTokenUseCase,
+    private val saveTokenUseCase: SaveTokenUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -30,12 +30,23 @@ class LoginViewModel(
     val effect = _effect.receiveAsFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Log.e("login", "Caught$throwable")
+        Log.e("LoginViewModel", "Caught exception: $throwable")
+    }
+
+    init {
+        viewModelScope.launch {
+            AuthCoordinator.authCode.collect { code ->
+                onEvent(LoginEvent.AuthorizationCodeReceived(code))
+            }
+        }
     }
 
     fun onEvent(event: LoginEvent) {
-        when (event) {
-            LoginEvent.AuthorizeClicked -> authorize()
+        viewModelScope.launch {
+            when (event) {
+                LoginEvent.AuthorizeClicked -> initiateAuthorization()
+                is LoginEvent.AuthorizationCodeReceived -> handleAuthorizationCode(event.code)
+            }
         }
     }
 
@@ -43,15 +54,17 @@ class LoginViewModel(
         return "https://github.com/login/oauth/authorize?client_id=${BuildConfig.GITHUB_CLIENT_ID}&redirect_uri=${BuildConfig.GITHUB_CALLBACK_URL}&scope=repo user&state=0"
     }
 
-    private fun authorize() {
-        Uri.parse(getAuthorizationUrl()).getQueryParameter(CODE_KEY)?.let { code ->
-            getToken(code)
-        }
+    private suspend fun initiateAuthorization() {
+        _effect.send(LoginEffect.NavigateToAuthUrl(getAuthorizationUrl()))
+    }
+
+    private fun handleAuthorizationCode(code: String) {
+        Log.d("LoginViewModel", "Received authorization code: $code")
+        getToken(code)
     }
 
     private fun getToken(code: String) {
         viewModelScope.launch(exceptionHandler) {
-
             _state.update { it.copy(authorizeButtonIsLoading = true) }
 
             accessTokenUseCase(
@@ -64,30 +77,20 @@ class LoginViewModel(
                 )
             ).let { result ->
                 when (result) {
-                    is Resource.Error -> {
-                        _state.update {
-                            it.copy(
-                                authorizeButtonIsLoading = false,
-                                isFailed = true
-                            )
-                        }
-                    }
-
                     is Resource.Success -> {
-                        _state.update {
-                            it.copy(
-                                authorizeButtonIsLoading = false,
-                                isFailed = false
-                            )
-                        }
-
+                        _state.update { it.copy(authorizeButtonIsLoading = false, isFailed = false) }
                         saveToken(result.data.accessToken)
-
                         navigateToSearch()
-
                     }
+
+                    is Resource.Error -> {
+                        _state.update { it.copy(authorizeButtonIsLoading = false, isFailed = true) }
+                    }
+
                 }
             }
+
+
         }
     }
 
@@ -96,10 +99,8 @@ class LoginViewModel(
     }
 
     private fun saveToken(token: String) {
-        saveTokenUseCase.invoke(token)
-    }
-
-    companion object {
-        private const val CODE_KEY = "code"
+        viewModelScope.launch {
+            saveTokenUseCase.invoke(token)
+        }
     }
 }

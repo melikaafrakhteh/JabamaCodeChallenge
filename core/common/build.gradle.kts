@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.koin)
+    implementation(libs.retrofit.converter.gson)
 }

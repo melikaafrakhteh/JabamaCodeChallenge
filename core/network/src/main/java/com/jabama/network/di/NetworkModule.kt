@@ -1,5 +1,8 @@
 package com.jabama.network.di
 
+import com.google.gson.GsonBuilder
+import com.jabama.common.Resource
+import com.jabama.common.ResourceDeserializer
 import com.jabama.network.interceptor.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -11,11 +14,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-const val OK_HTTP = "OK_HTTP"
+private const val OK_HTTP = "OK_HTTP"
 const val RETROFIT = "RETROFIT"
-const val READ_TIMEOUT = "READ_TIMEOUT"
-const val WRITE_TIMEOUT = "WRITE_TIMEOUT"
-const val CONNECTION_TIMEOUT = "CONNECTION_TIMEOUT"
+private const val READ_TIMEOUT = "READ_TIMEOUT"
+private const val WRITE_TIMEOUT = "WRITE_TIMEOUT"
+private const val CONNECTION_TIMEOUT = "CONNECTION_TIMEOUT"
+
+private val gson = GsonBuilder()
+    .registerTypeAdapter(Resource::class.java, ResourceDeserializer())
+    .create()
 
 val networkModule = module {
 
@@ -42,8 +49,8 @@ val networkModule = module {
     single(named(RETROFIT)) {
         Retrofit.Builder()
             .client(get(named(OK_HTTP)))
-            .baseUrl("http://api.github.com")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://github.com")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }

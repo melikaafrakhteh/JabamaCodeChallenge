@@ -11,7 +11,10 @@ import com.jabama.search.SearchRoute
 
 
 @Composable
-internal fun JabamaAppNavigation(isAuthenticated: Boolean) {
+internal fun JabamaAppNavigation(
+    isAuthenticated: Boolean,
+    onNavigateToAuthUrl: (String) -> Unit
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -19,10 +22,14 @@ internal fun JabamaAppNavigation(isAuthenticated: Boolean) {
         startDestination = if (isAuthenticated) SEARCH_ROUTE else LOGIN_ROUTE
     ) {
         composable(route = LOGIN_ROUTE) {
-            LoginRoute {
-                navController.navigate(SEARCH_ROUTE)
-            }
+            LoginRoute (
+                navigateToSearch = {
+                    navController.navigate(SEARCH_ROUTE)
+                },
+                onNavigateToAuthUrl = onNavigateToAuthUrl
+            )
         }
+
         composable(route = SEARCH_ROUTE) {
             SearchRoute {
                 navController.navigate(LOGIN_ROUTE)

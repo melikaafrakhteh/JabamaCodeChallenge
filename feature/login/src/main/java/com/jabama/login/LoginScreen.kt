@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +31,7 @@ fun LoginRoute(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
     navigateToSearch: () -> Unit,
+    onNavigateToAuthUrl: (String) -> Unit
 ) {
     val loginUiState by viewModel.state.collectAsStateWithLifecycle()
 
@@ -48,6 +50,10 @@ fun LoginRoute(
             when (effect) {
                 LoginEffect.NavigateToSearch -> {
                     navigateToSearch()
+                }
+
+                is LoginEffect.NavigateToAuthUrl -> {
+                    onNavigateToAuthUrl(effect.url)
                 }
             }
         }
@@ -97,10 +103,12 @@ internal fun LoginScreen(
 @Composable
 private fun Preview() {
     JabamaTheme {
-        LoginScreen(
-            uiState = LoginState(isFailed = true),
-            modifier = Modifier.fillMaxSize(),
-            onButtonClick = {}
-        )
+        Surface {
+            LoginScreen(
+                uiState = LoginState(isFailed = true),
+                modifier = Modifier.fillMaxSize(),
+                onButtonClick = {}
+            )
+        }
     }
 }

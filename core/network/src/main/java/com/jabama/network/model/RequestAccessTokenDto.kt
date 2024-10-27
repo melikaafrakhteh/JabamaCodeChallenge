@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 data class RequestAccessTokenDto(
     @SerializedName("client_id")
-    var clientId: String,
+    val clientId: String,
 
     @SerializedName("client_secret")
-    var clientSecret: String,
+    val clientSecret: String,
 
     @SerializedName("code")
-    var code: String,
+    val code: String,
 
     @SerializedName("redirect_uri")
-    var redirectUri: String,
+    val redirectUri: String,
 
     @SerializedName("state")
-    var state: String
+    val state: String
 )
