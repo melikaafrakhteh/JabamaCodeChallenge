@@ -9,15 +9,6 @@ import com.jabama.network.model.RepositoryResponseDto
 import com.jabama.network.model.RequestAccessTokenDto
 import com.jabama.network.model.ResponseAccessTokenDto
 
-fun RequestAccessTokenDto.toDomainModel(): RequestAccessToken {
-    return RequestAccessToken(
-        clientId = clientId,
-        clientSecret = clientSecret,
-        code = code,
-        redirectUri = redirectUri,
-        state = state
-    )
-}
 
 fun RequestAccessToken.toDataModel(): RequestAccessTokenDto {
     return RequestAccessTokenDto(
@@ -31,13 +22,6 @@ fun RequestAccessToken.toDataModel(): RequestAccessTokenDto {
 
 fun ResponseAccessTokenDto.toDomainModel(): ResponseAccessToken {
     return ResponseAccessToken(
-        accessToken = accessToken,
-        tokenType = tokenType
-    )
-}
-
-fun ResponseAccessToken.toDataModel(): ResponseAccessTokenDto {
-    return ResponseAccessTokenDto(
         accessToken = accessToken,
         tokenType = tokenType
     )
