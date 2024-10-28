@@ -51,7 +51,7 @@ class SearchViewModel(
         viewModelScope.launch(exceptionHandler) {
             _state
                 .map { it.searchQuery }
-                .debounce(300)
+                .debounce(DEBOUNCE)
                 .distinctUntilChanged()
                 .filter { query -> query?.isNotBlank() == true }
                 .onEach { query ->
@@ -60,7 +60,7 @@ class SearchViewModel(
                 .flatMapLatest { query ->
                     getRepositoriesUseCase(
                         query.orEmpty(),
-                        perPage = 30,
+                        perPage = PER_PAGE,
                         page = 1
                     )
                         .onStart {
@@ -112,7 +112,7 @@ class SearchViewModel(
     private fun handleSearchResults(results: Resource<RepositoryResponse>) {
         when (results) {
             is Resource.Success -> {
-                val repositories = results.data.items.take(30)
+                val repositories = results.data.items.take(PER_PAGE)
                 _state.update {
                     it.copy(
                         apiIsLoading = false,
@@ -133,5 +133,10 @@ class SearchViewModel(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val DEBOUNCE = 250L
+        private const val PER_PAGE = 30
     }
 }
