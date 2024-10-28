@@ -1,6 +1,6 @@
 package com.jabama.network.di
 
-import com.jabama.network.api.GitHubService
+import com.jabama.network.api.AuthService
 import com.jabama.network.datasource.token.AccessTokenDataSource
 import com.jabama.network.datasource.token.AccessTokenDataSourceImpl
 import org.koin.core.qualifier.named
@@ -9,8 +9,8 @@ import retrofit2.Retrofit
 
 val accessTokenModule = module {
 
-    factory<GitHubService> {
-        get<Retrofit>(named(RETROFIT)).create(GitHubService::class.java)
+    factory<AuthService> {
+        get<Retrofit>(named(RETROFIT_AUTH)).create(AuthService::class.java)
     }
 
     factory<AccessTokenDataSource> {

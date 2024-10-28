@@ -15,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 private const val OK_HTTP = "OK_HTTP"
-const val RETROFIT = "RETROFIT"
+const val RETROFIT_SEARCH = "RETROFIT_SEARCH"
+const val RETROFIT_AUTH = "RETROFIT_AUTH"
 private const val READ_TIMEOUT = "READ_TIMEOUT"
 private const val WRITE_TIMEOUT = "WRITE_TIMEOUT"
 private const val CONNECTION_TIMEOUT = "CONNECTION_TIMEOUT"
@@ -46,10 +47,19 @@ val networkModule = module {
             .build()
     }
 
-    single(named(RETROFIT)) {
+    single(named(RETROFIT_SEARCH)) {
         Retrofit.Builder()
             .client(get(named(OK_HTTP)))
             .baseUrl("https://api.github.com")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
+    }
+
+    single(named(RETROFIT_AUTH)) {
+        Retrofit.Builder()
+            .client(get(named(OK_HTTP)))
+            .baseUrl("https://github.com")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
