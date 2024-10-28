@@ -1,6 +1,5 @@
 package com.jabama.common
 
-import android.util.Log
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -26,7 +25,6 @@ class ResourceDeserializer : JsonDeserializer<Resource<*>> {
                 Resource.Error(Exception("Invalid type"))
             }
         } catch (e: Exception) {
-            Log.d("meli", "deserialize error: ${e.message}")
             Resource.Error(e)
         }
     }
