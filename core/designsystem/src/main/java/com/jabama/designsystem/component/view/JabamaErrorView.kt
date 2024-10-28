@@ -1,5 +1,6 @@
 package com.jabama.designsystem.component.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +35,8 @@ fun JabamaErrorView(
 
             Text(
                 text = stringResource(R.string.oops),
-                style = Typography.bodyLarge
+                style = Typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -41,7 +44,8 @@ fun JabamaErrorView(
             Text(
                 text = errorMessage,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp),
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -58,7 +62,9 @@ fun JabamaErrorView(
 private fun Preview() {
     JabamaTheme {
         JabamaErrorView(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             errorMessage = "Unfortunately, an error has occurred.",
             onRetryClicked = {}
         )

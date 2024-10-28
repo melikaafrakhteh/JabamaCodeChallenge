@@ -8,22 +8,25 @@ import androidx.lifecycle.viewModelScope
 import com.jabama.common.Resource
 import com.jabama.domain.usecase.repositories.GetRepositoriesUseCase
 import com.jabama.domain.usecase.token.ClearTokenUseCase
+import com.jabama.model.RepositoryResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModel(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
     private val clearTokenUseCase: ClearTokenUseCase
@@ -36,43 +39,46 @@ class SearchViewModel(
     val effect = _effect.receiveAsFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Log.e("search", "Caught$throwable")
+        Log.e("SearchViewModel", "Caught exception: $throwable")
     }
 
     init {
+        observeSearchQuery()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeSearchQuery() {
         viewModelScope.launch(exceptionHandler) {
-            state
+            _state
                 .map { it.searchQuery }
                 .debounce(300)
                 .distinctUntilChanged()
+                .filter { query -> query?.isNotBlank() == true }
+                .onEach { query ->
+                    Log.d("SearchVM", "Searching for: $query")
+                }
                 .flatMapLatest { query ->
-                    getRepositoriesUseCase(query.orEmpty())
-                }
-                .onStart {
-                    _state.update { it.copy(apiIsLoading = true) }
-                }
-                .collect { results ->
-                    when (results) {
-                        is Resource.Error -> {
-                            _state.update {
-                                it.copy(
-                                    isFailed = true,
-                                    errorMessage = results.exception.toString(),
-                                    apiIsLoading = false
-                                )
-                            }
+                    getRepositoriesUseCase(
+                        query.orEmpty(),
+                        perPage = 30,
+                        page = 1
+                    )
+                        .onStart {
+                            _state.update { it.copy(apiIsLoading = true) }
                         }
-
-                        is Resource.Success -> {
+                        .catch { error ->
                             _state.update {
                                 it.copy(
                                     apiIsLoading = false,
-                                    isFailed = false,
-                                    searchedRepository = results.data
+                                    isFailed = true,
+                                    errorMessage = error.message
                                 )
                             }
+                            emit(Resource.Error(Exception(error.message)))
                         }
-                    }
+                }
+                .collect { result ->
+                    handleSearchResults(result)
                 }
         }
     }
@@ -80,28 +86,21 @@ class SearchViewModel(
     fun onEvent(event: SearchEvent) {
         viewModelScope.launch {
             when (event) {
+                is SearchEvent.SearchQueryChanged -> {
+                    _state.update { it.copy(searchQuery = event.query) }
+                }
+
                 SearchEvent.Logout -> {
                     clearTokenUseCase()
                     navigateToLogin()
                 }
-
-                is SearchEvent.SearchQueryChanged -> {
-                    _state.update {
-                        it.copy(
-                            searchQuery = event.query
-                        )
-                    }
-                }
-
                 SearchEvent.OnClearQueryClick -> {
-                    _state.update {
-                        it.copy(
-                            searchQuery = null
-                        )
-                    }
+                    _state.update { it.copy(searchQuery = null) }
                 }
 
-                SearchEvent.OnRetryClick -> retrySearch()
+                SearchEvent.OnRetryClick -> {
+                    _state.update { it.copy(searchQuery = null) }
+                }
             }
         }
     }
@@ -110,33 +109,29 @@ class SearchViewModel(
         _effect.send(SearchEffect.NavigateToLogin)
     }
 
-    private fun retrySearch() {
-        viewModelScope.launch(exceptionHandler) {
-            getRepositoriesUseCase(_state.value.searchQuery.orEmpty())
-                .collect { results ->
-                    when (results) {
-                        is Resource.Error -> {
-                            _state.update {
-                                it.copy(
-                                    isFailed = true,
-                                    errorMessage = results.exception.toString(),
-                                    apiIsLoading = false
-                                )
-                            }
-                        }
-
-                        is Resource.Success -> {
-                            _state.update {
-                                it.copy(
-                                    apiIsLoading = false,
-                                    isFailed = false,
-                                    searchedRepository = results.data
-                                )
-                            }
-                        }
-                    }
+    private fun handleSearchResults(results: Resource<RepositoryResponse>) {
+        when (results) {
+            is Resource.Success -> {
+                val repositories = results.data.items.take(30)
+                _state.update {
+                    it.copy(
+                        apiIsLoading = false,
+                        isFailed = repositories.isEmpty(),
+                        searchedRepository = repositories,
+                        errorMessage = null
+                    )
                 }
+            }
+
+            is Resource.Error -> {
+                _state.update {
+                    it.copy(
+                        apiIsLoading = false,
+                        isFailed = true,
+                        errorMessage = results.exception?.message ?: "Unknown error"
+                    )
+                }
+            }
         }
     }
-
 }

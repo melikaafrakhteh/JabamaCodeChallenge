@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface RepositoriesSearchRepository {
 
     fun getRepositories(
-        searchQuery: String
+        searchQuery: String,
+        perPage: Int,
+        page: Int,
     ): Flow<Resource<RepositoryResponse>>
 
 }

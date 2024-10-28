@@ -3,8 +3,8 @@ package com.jabama.challenge.authentication
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            enableEdgeToEdge()
+
             authViewModel.onEvent(AuthenticationEvent.CheckAuthStatus)
 
             val state by authViewModel.state.collectAsStateWithLifecycle()

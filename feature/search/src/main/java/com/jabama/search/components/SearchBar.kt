@@ -1,9 +1,10 @@
 package com.jabama.search.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Close
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -33,8 +35,11 @@ fun SearchBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(16.dp)
             .height(56.dp)
-            .background(MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.small)
+            .clip(RoundedCornerShape(8.dp))
+            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Row(
@@ -52,18 +57,26 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChanged,
                 singleLine = true,
-                textStyle = TextStyle(fontSize = 16.sp, color = Color.Black),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = if (query.isEmpty()) Color.Gray else MaterialTheme.colorScheme.primary
+                ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.secondary),
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = 8.dp)
-            ) {
+            ) { innerTextField ->
                 if (query.isEmpty()) {
-                    Text(stringResource(R.string.search_hint), color = Color.Gray, fontSize = 16.sp)
+                    Text(
+                        text = stringResource(R.string.search_hint),
+                        color = Color.Gray,
+                        fontSize = 16.sp
+                    )
                 } else {
-                    it()
+                    innerTextField()
                 }
             }
+
 
             if (query.isNotEmpty()) {
                 IconButton(onClick = onClearQuery) {

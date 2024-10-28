@@ -11,9 +11,11 @@ class RepositoryDataSourceImpl(
 ) : RepositoryDataSource {
 
     override fun getRepositories(
-        searchQuery: String
+        searchQuery: String,
+        perPage: Int,
+        page: Int,
     ): Flow<Resource<RepositoryResponseDto>> = flow {
-        emit(service.getRepositories(searchQuery))
+        emit(service.getRepositories(searchQuery, perPage, page))
     }
 
 }

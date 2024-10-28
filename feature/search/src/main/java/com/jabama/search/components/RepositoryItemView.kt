@@ -1,5 +1,6 @@
 package com.jabama.search.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +36,9 @@ internal fun RepositoryItemView(
         ) {
             Text(
                 text = name,
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f).padding(end = 4.dp)
             )
 
             if (!language.isNullOrEmpty()) {
@@ -51,10 +54,10 @@ internal fun RepositoryItemView(
             Text(
                 text = description,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp)
+                    .padding(8.dp)
             )
         }
     }
@@ -67,7 +70,8 @@ private fun Preview() {
         RepositoryItemView(
             name = "Tetris",
             description = "A C implementation of Tetris using Pennsim through LC4",
-            language = "kotlin"
+            language = "kotlin",
+            modifier = Modifier.background(MaterialTheme.colorScheme.onBackground)
         )
     }
 }

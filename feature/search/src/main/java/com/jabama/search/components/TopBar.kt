@@ -1,5 +1,6 @@
 package com.jabama.search.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.ExitToApp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,14 +28,14 @@ internal fun TopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .background(color = MaterialTheme.colorScheme.secondary)
+            .padding(top = 40.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = stringResource(R.string.top_bar),
             modifier = Modifier.padding(start = 8.dp)
-
         )
 
         Icon(
@@ -41,7 +43,7 @@ internal fun TopBar(
             contentDescription = null,
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(16.dp)
+                .size(24.dp)
                 .clickable(onClick = onButtonClick)
         )
     }

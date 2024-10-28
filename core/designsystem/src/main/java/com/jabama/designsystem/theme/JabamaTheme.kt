@@ -20,7 +20,7 @@ val LightDefaultColorScheme = lightColorScheme(
     surface = Gray,
     onSurface = Black,
     background = White,
-    onBackground = Black
+    onBackground = Gray
 )
 
 /**
@@ -28,15 +28,15 @@ val LightDefaultColorScheme = lightColorScheme(
  */
 
 val DarkDefaultColorScheme = darkColorScheme(
-    primary = Black,
-    onPrimary = White,
+    primary = White,
+    onPrimary = Black,
     secondary = Yellow,
     error = Red,
     onError = White,
     surface = Gray,
     onSurface = Black,
-    background = Gray,
-    onBackground = Black
+    background = Gray2,
+    onBackground = White
 )
 
 @Composable

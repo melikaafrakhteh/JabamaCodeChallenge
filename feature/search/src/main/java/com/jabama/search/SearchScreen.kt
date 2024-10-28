@@ -1,17 +1,19 @@
 package com.jabama.search
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jabama.designsystem.component.preview.ThemePreviews
@@ -19,7 +21,7 @@ import com.jabama.designsystem.component.view.JabamaErrorView
 import com.jabama.designsystem.component.view.JabamaLoadingView
 import com.jabama.designsystem.theme.JabamaTheme
 import com.jabama.model.Repository
-import com.jabama.model.RepositoryResponse
+import com.jabama.search.components.NoDataView
 import com.jabama.search.components.RepositoryItemView
 import com.jabama.search.components.SearchBar
 import com.jabama.search.components.TopBar
@@ -38,7 +40,6 @@ fun SearchRoute(
         uiState = searchUiState,
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
             .then(modifier),
         onLogoutClicked = {
             viewModel.onEvent(SearchEvent.Logout)
@@ -82,6 +83,7 @@ private fun SearchScreen(
             SearchContentView(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(innerPadding)
                     .then(modifier),
                 state = uiState,
@@ -94,7 +96,6 @@ private fun SearchScreen(
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchContentView(
     modifier: Modifier = Modifier,
@@ -104,47 +105,55 @@ fun SearchContentView(
     onRetryClicked: () -> Unit,
 ) {
     Column(modifier = modifier) {
-        LazyColumn {
 
-            stickyHeader(
-                key = "header",
-            ) {
-                SearchBar(
-                    query = state.searchQuery.orEmpty(),
-                    onClearQuery = onClearQuery,
-                    onQueryChanged = onQueryChanged
+        SearchBar(
+            query = state.searchQuery.orEmpty(),
+            onClearQuery = onClearQuery,
+            onQueryChanged = onQueryChanged,
+        )
+
+        when {
+            state.apiIsLoading -> {
+                JabamaLoadingView()
+            }
+
+            state.isFailed -> {
+                JabamaErrorView(
+                    errorMessage = state.errorMessage.orEmpty(),
+                    onRetryClicked = onRetryClicked,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                 )
             }
 
-            when {
-                state.apiIsLoading -> {
-                    item(key = "loading") {
-                        JabamaLoadingView()
-                    }
-                }
+            state.searchedRepository?.isEmpty() == false -> {
 
-                state.isFailed -> {
-                    item(key = "failed") {
-                        JabamaErrorView(
-                            errorMessage = state.errorMessage.orEmpty(),
-                            onRetryClicked = onRetryClicked
-                        )
-                    }
-                }
-
-                else -> {
+                LazyColumn {
                     items(
-                        items = state.searchedRepository?.items.orEmpty(),
-                        key = { repository -> state.searchedRepository?.items.orEmpty()[repository.id] }
+                        items = state.searchedRepository,
+                        key = { repository -> "${repository.id}" }
                     ) { repository ->
                         RepositoryItemView(
-                            modifier = Modifier.padding(2.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .background(MaterialTheme.colorScheme.onBackground)
+                                .clip(RoundedCornerShape(2.dp)),
                             name = repository.name,
                             description = repository.description,
                             language = repository.language
                         )
                     }
                 }
+
+            }
+
+            else -> {
+                NoDataView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background)
+                )
             }
         }
     }
@@ -157,21 +166,22 @@ private fun Preview() {
         SearchScreen(
             uiState = SearchState(
                 searchQuery = "hi",
-                searchedRepository = RepositoryResponse(
-                    items = listOf(
-                        Repository(
-                            id = 1,
-                            name = "jabama",
-                            description = "code challenge",
-                            language = "kotlin"
-                        )
+                searchedRepository = listOf(
+                    Repository(
+                        id = 1,
+                        name = "jabama",
+                        description = "code challenge",
+                        language = "kotlin"
                     )
                 )
             ),
             onRetryClicked = {},
             onQueryChanged = {},
             onClearQuery = {},
-            onLogoutClicked = {}
+            onLogoutClicked = {},
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         )
     }
 }

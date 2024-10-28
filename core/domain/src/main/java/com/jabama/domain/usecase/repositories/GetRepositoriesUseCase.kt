@@ -10,9 +10,11 @@ class GetRepositoriesUseCase(
 ) {
 
     operator fun invoke(
-        query: String
+        searchQuery: String,
+        perPage: Int,
+        page: Int,
     ): Flow<Resource<RepositoryResponse>> {
-        return repository.getRepositories(searchQuery = query)
+        return repository.getRepositories(searchQuery = searchQuery, perPage = perPage, page = page)
     }
 
 }

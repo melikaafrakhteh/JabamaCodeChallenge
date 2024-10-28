@@ -14,14 +14,24 @@ class RepositoriesSearchRepositoryImpl(
     private val dataSource: RepositoryDataSource,
     private val defaultDispatcher: CoroutineDispatcher
 ) : RepositoriesSearchRepository {
-    override fun getRepositories(searchQuery: String): Flow<Resource<RepositoryResponse>> {
-        return dataSource.getRepositories(searchQuery).map { resource ->
+
+    override fun getRepositories(
+        searchQuery: String,
+        perPage: Int,
+        page: Int,
+    ): Flow<Resource<RepositoryResponse>> {
+        return dataSource.getRepositories(searchQuery, perPage, page).map { resource ->
             when (resource) {
                 is Resource.Success -> {
                     val mappedData = withContext(defaultDispatcher) {
                         resource.data.toDomainModel()
                     }
-                    Resource.Success(mappedData)
+
+                    val limitedResponse = mappedData.copy(
+                        items = mappedData.items.take(30)
+                    )
+
+                    Resource.Success(limitedResponse)
                 }
 
                 is Resource.Error -> Resource.Error(resource.exception)
