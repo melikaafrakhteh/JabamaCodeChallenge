@@ -18,8 +18,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField ("String", "GITHUB_CLIENT_ID", "\"Ov23liCMnKeaPbiFuMDd\"")
-            buildConfigField ("String", "GITHUB_CLIENT_SECRET", "\"914d31af0a192870110e48e5b90801cdc87d7e38\"")
+            buildConfigField ("String", "GITHUB_CLIENT_ID", "")
+            buildConfigField ("String", "GITHUB_CLIENT_SECRET", "")
             buildConfigField ("String", "GITHUB_CALLBACK_URL", "\"jabama://callback\"")
         }
     }
