@@ -11,6 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.jabama.challenge.authentication.navigation.JabamaAppNavigation
 import com.jabama.common.AuthCoordinator
+import com.jabama.designsystem.component.view.JabamaLoadingView
 import com.jabama.designsystem.theme.JabamaTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,17 +26,24 @@ class MainActivity : AppCompatActivity() {
         setContent {
             enableEdgeToEdge()
 
-            authViewModel.onEvent(AuthenticationEvent.CheckAuthStatus)
-
             val state by authViewModel.state.collectAsStateWithLifecycle()
 
             JabamaTheme {
-                JabamaAppNavigation(
-                    isAuthenticated = state.isAuthenticated,
-                    onNavigateToAuthUrl = ::launchAuthorizationUrl
-                )
+                if (state.chooseDestinationLoading) {
+                    JabamaLoadingView()
+                } else {
+                    JabamaAppNavigation(
+                        isAuthenticated = state.isAuthenticated,
+                        onNavigateToAuthUrl = ::launchAuthorizationUrl
+                    )
+                }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        authViewModel.onEvent(AuthenticationEvent.CheckAuthStatus)
     }
 
     private fun launchAuthorizationUrl(url: String) {

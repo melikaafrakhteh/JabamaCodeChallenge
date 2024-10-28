@@ -13,6 +13,7 @@ class AuthenticationViewModel(
     private val _state = MutableStateFlow(AuthenticationState())
     val state = _state.asStateFlow()
 
+
     fun onEvent(event: AuthenticationEvent) {
         when (event) {
             AuthenticationEvent.CheckAuthStatus -> checkAuthStatus()
@@ -21,7 +22,10 @@ class AuthenticationViewModel(
 
     private fun checkAuthStatus() {
         val isLoggedIn = readTokenUseCase().isNotEmpty()
-        _state.update { it.copy(isAuthenticated = isLoggedIn) }
+        _state.update { it.copy(
+            isAuthenticated = isLoggedIn,
+            chooseDestinationLoading = false
+        ) }
     }
 
 }
